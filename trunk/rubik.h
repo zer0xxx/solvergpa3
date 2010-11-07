@@ -15,7 +15,7 @@ class rubik {
 public:
 	rubik();
 	void reset();
-	void display();
+	string display();
 	void transpose(int face, bool clockwise);
 	void setState(string s);
 	void roll(int f1, int c11, int c12, int c13,

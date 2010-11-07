@@ -2,27 +2,22 @@
 #include <QCoreApplication>
 #include <iostream>
 #include "rubik.h"
+#include "solver.h"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
-	string state;
-	string commands;
+	solver* s;
+	string localState;
 	if (argc > 1) {
-		rubik* cube = new rubik();
-		cube->setState(argv[1]);
-		cube->process("B'");
-		cube->process("R");
-		cube->process("F");
-		cube->process("U");
-		cube->process("L");
-		cube->process("X");
-		cube->process("D");
-		cube->display();
 		if (argc > 2) {
-			commands = argv[1];
+			s = new solver(string(argv[1]), argv[2]);
 		}
+		else {
+			s = new solver(string(argv[1]), "0");
+		}
+		s->solve();
 	}
 	else {
 		cout << "Cube state required" << endl;

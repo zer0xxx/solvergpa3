@@ -43,15 +43,15 @@ void rubik::reset() {
 	down = 5;
 }
 
-void rubik::display() {
-	cout << "here" << endl;
+string rubik::display() {
 	QString dump = "";
 	for (int face = 0; face < 6; face++) {
 		for (int cell = 0; cell < 9; cell++) {
 			dump.append(cube[face][cell]);
 		}
 	}
-	printf("%s\n", qPrintable(dump));
+	return qPrintable(dump);
+	//printf("%s\n", qPrintable(dump));
 }
 
 void rubik::transpose(int face, bool clockwise) {
