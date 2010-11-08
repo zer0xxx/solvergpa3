@@ -726,7 +726,9 @@ void rubik::process(string command) {
 		}
 		transpose(left, false);
 	}
-
+	else {
+		cout << "ERR!" << endl;
+	}
 }
 
 rubik::~rubik() {
