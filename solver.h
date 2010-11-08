@@ -16,8 +16,12 @@ class solver {
 public:
 	solver(string s, string r);
 	void solve();
-	rubik* cube;
+	void force(rubik* cube, string lc, int steps);
+	bool checkSolved(string s);
 	virtual ~solver();
+
+	rubik* cube;
+	rubik* test;
 private:
 	vector<string> commands;
 };
