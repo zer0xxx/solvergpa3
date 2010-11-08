@@ -57,7 +57,9 @@ void solver::force(rubik* crubik, string lastCommand, int stepsLeft) {
 			cout << lastCommand << endl;
 		}
 		for (unsigned int i = 0; i < commands.size(); i++) {
-			if (tc.compare(commands[i]) != 0) {
+			//cout << tc.compare(commands[i] + "'") << endl;
+			if (tc.compare(commands[i] + "'") != 0 && commands[i].compare(tc + "'") != 0) {
+				//cout << tc << " | " << commands[i] << endl;
 				string localCommand = lastCommand;
 				test->setState(localState);
 				force(test, localCommand.append(commands[i]), stepsLeft-1);
