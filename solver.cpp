@@ -14,8 +14,8 @@ solver::solver(string state, string r) {
 	// TODO Auto-generated constructor stub
 	cube = new rubik();
 	test = new rubik();
+	cube->setState(state);
 	if (r.compare("0") == 0) {
-		cube->setState(state);
 		commands.push_back("U");
 		commands.push_back("U'");
 		commands.push_back("D");
@@ -28,6 +28,27 @@ solver::solver(string state, string r) {
 		commands.push_back("F'");
 		commands.push_back("B");
 		commands.push_back("B'");
+	}
+	else {
+		for (unsigned int i = 0; i < r.size(); i++) {
+			if (r.at(i) != 'X'
+				&& r.at(i) != 'Y'
+				&& r.at(i) != 'Z'
+				&& r.at(i) != '\'') {
+				if ((i + 1 < r.size()) && r.at(i + 1) == '\'') {
+					string ps = string(1, r.at(i++));
+					ps += '\'';
+					commands.push_back(ps);
+				}
+				else {
+					commands.push_back(string(1, r.at(i)));
+				}
+			}
+		}
+		for (unsigned int i = 0; i < commands.size(); i++) {
+			cout << commands[i];
+		}
+		cout << endl;
 	}
 }
 
