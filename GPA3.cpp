@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	if (argc > 1) {
 		if (argc > 2) {
 			s = new solver(string(argv[1]), argv[2]);
-			cout << argv[2] << endl;
+			//cout << argv[2] << endl;
 		}
 		else {
 			s = new solver(string(argv[1]), "0");

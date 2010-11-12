@@ -14,6 +14,7 @@ solver::solver(string state, string r) {
 	// TODO Auto-generated constructor stub
 	cube = new rubik();
 	test = new rubik();
+	isSolved = false;
 	cube->setState(state);
 	if (r.compare("0") == 0) {
 		commands.push_back("U");
@@ -45,46 +46,50 @@ solver::solver(string state, string r) {
 				}
 			}
 		}
-		for (unsigned int i = 0; i < commands.size(); i++) {
+		/*for (unsigned int i = 0; i < commands.size(); i++) {
 			cout << commands[i];
 		}
-		cout << endl;
+		cout << endl;*/
 	}
 }
 
 void solver::solve() {
-	// 4 steps solver
-	string intermediate;
-	cout << "Possible solutions: " << endl;
-	for (unsigned int i = 0; i < commands.size(); i++) {
-		force(cube, commands[i], 6);
+	for (int i = 0; i < commands.size(); i++) {
+		triedCommands.push(commands.at(i));
+	}
+	while (!isSolved && triedCommands.size() > 0) {
+		test->setState(cube->display());
+		force(cube, triedCommands.front(), 0);
+		triedCommands.pop();
 	}
 }
 
-void solver::force(rubik* crubik, string lastCommand, int stepsLeft) {
-	if (stepsLeft >= 1) {
-		string tc = "";
-		test->setState(crubik->display());
-		if (lastCommand.at(lastCommand.size() - 1) == '\'') {
-			tc.append(1, lastCommand.at(lastCommand.size() - 2));
-			tc.append("'");
+void solver::force(rubik* crubik, string lastCommand, int comLength) {
+	//cout << "Passing " << lastCommand << " on " << crubik->display() << endl;
+	/*if (lastCommand.at(lastCommand.length() - 1) == '\'') {
+		tc = string(1, lastCommand.at(lastCommand.length() - 2)) + string(1, lastCommand.at(lastCommand.length() - 1));
+	}
+	else {
+		tc = string(1, lastCommand.at(lastCommand.length() - 1));
+	}
+	test->process(tc);*/
+	for (int i = 0; i < lastCommand.length(); i++) {
+		if (i < lastCommand.length() - 1 && lastCommand.at(i + 1) == '\'') {
+			test->process(string(1, lastCommand.at(i)) + '\'');
+			i++;
 		}
 		else {
-			tc.append(1, lastCommand.at(lastCommand.size() - 1));
+			test->process(string(1, lastCommand.at(i)));
 		}
-		test->process(tc);
-		string localState = test->display();
-		if (checkSolved(test->display())) {
-			cout << lastCommand << endl;
-		}
-		for (unsigned int i = 0; i < commands.size(); i++) {
-			//cout << tc.compare(commands[i] + "'") << endl;
-			if (tc.compare(commands[i] + "'") != 0 && commands[i].compare(tc + "'") != 0) {
-				//cout << tc << " | " << commands[i] << endl;
-				string localCommand = lastCommand;
-				test->setState(localState);
-				force(test, localCommand.append(commands[i]), stepsLeft-1);
-			}
+	}
+	//cout << "Results: " << test->display() << endl;
+	if (checkSolved(test->display())) {
+		isSolved = true;
+		cout << "Solution Found " << lastCommand << endl;
+	}
+	else {
+		for (int i = 0; i < commands.size(); i++) {
+			triedCommands.push(lastCommand + commands.at(i));
 		}
 	}
 }

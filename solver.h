@@ -9,6 +9,7 @@
 #define SOLVER_H_
 #include <string>
 #include <vector>
+#include <queue>
 #include "rubik.h"
 using namespace std;
 
@@ -24,6 +25,9 @@ public:
 	rubik* test;
 private:
 	vector<string> commands;
+	queue<string> triedCommands;
+	bool isSolved;
+	string tc;
 };
 
 #endif /* SOLVER_H_ */
