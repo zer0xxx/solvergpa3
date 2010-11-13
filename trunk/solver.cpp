@@ -7,6 +7,7 @@
 
 #include "solver.h"
 #include "rubik.h"
+#include <sys/time.h> 
 #include <string>
 using namespace std;
 
@@ -15,6 +16,7 @@ solver::solver(string state, string r) {
 	cube = new rubik();
 	test = new rubik();
 	isSolved = false;
+	pcount = 0;
 	cube->setState(state);
 	if (r.compare("0") == 0) {
 		commands.push_back("U");
@@ -65,7 +67,9 @@ void solver::solve() {
 }
 
 void solver::force(rubik* crubik, string lastCommand, int comLength) {
-	//cout << "Passing " << lastCommand << " on " << crubik->display() << endl;
+	//cout << "Passing " << lastCommand << endl;
+	//cout << pcount++ << endl;
+	pcount++;
 	/*if (lastCommand.at(lastCommand.length() - 1) == '\'') {
 		tc = string(1, lastCommand.at(lastCommand.length() - 2)) + string(1, lastCommand.at(lastCommand.length() - 1));
 	}
@@ -73,23 +77,36 @@ void solver::force(rubik* crubik, string lastCommand, int comLength) {
 		tc = string(1, lastCommand.at(lastCommand.length() - 1));
 	}
 	test->process(tc);*/
+	string tc;
 	for (int i = 0; i < lastCommand.length(); i++) {
 		if (i < lastCommand.length() - 1 && lastCommand.at(i + 1) == '\'') {
 			test->process(string(1, lastCommand.at(i)) + '\'');
+			tc = string(1, lastCommand.at(i)) + '\'';
 			i++;
 		}
 		else {
 			test->process(string(1, lastCommand.at(i)));
+			tc = string(1, lastCommand.at(i));
 		}
 	}
-	//cout << "Results: " << test->display() << endl;
 	if (checkSolved(test->display())) {
 		isSolved = true;
-		cout << "Solution Found " << lastCommand << endl;
+		//cout << "Solution Found " << lastCommand << " after " << pcount << " nodes" << endl;
+		for (int j = 0; j < lastCommand.length(); j++) {
+			if (j + 1 < lastCommand.length() && lastCommand.at(j+1) == '\'') {
+				cout << lastCommand.at(j++) << "'" << endl;
+			}
+			else {
+				cout << lastCommand.at(j) << endl;
+			}
+		}
 	}
 	else {
-		for (int i = 0; i < commands.size(); i++) {
-			triedCommands.push(lastCommand + commands.at(i));
+		if ((test->display()).compare(cube->display()) != 0) {
+			for (int i = 0; i < commands.size(); i++) {
+				if (tc.compare(commands.at(i) + "'") != 0 && (tc + "'").compare(commands.at(i)) != 0)
+				triedCommands.push(lastCommand + commands.at(i));
+			}
 		}
 	}
 }
