@@ -17,6 +17,8 @@ solver::solver(string state, string r) {
 	test = new rubik();
 	isSolved = false;
 	pcount = 0;
+        stallCount = 4;
+        stallRequired = false;
 	cube->setState(state);
 	if (r.compare("0") == 0) {
 		commands.push_back("U");
@@ -56,20 +58,21 @@ solver::solver(string state, string r) {
 }
 
 void solver::solve() {
-	for (int i = 0; i < commands.size(); i++) {
+	for (unsigned int i = 0; i < commands.size(); i++) {
 		triedCommands.push(commands.at(i));
 	}
+        time(&start);
 	while (!isSolved && triedCommands.size() > 0) {
 		test->setState(cube->display());
-		force(cube, triedCommands.front(), 0);
+		force(triedCommands.front());
 		triedCommands.pop();
 	}
 }
 
-void solver::force(rubik* crubik, string lastCommand, int comLength) {
+void solver::force(string lastCommand) {
 	//cout << "Passing " << lastCommand << endl;
 	//cout << pcount++ << endl;
-	pcount++;
+	//pcount++;
 	/*if (lastCommand.at(lastCommand.length() - 1) == '\'') {
 		tc = string(1, lastCommand.at(lastCommand.length() - 2)) + string(1, lastCommand.at(lastCommand.length() - 1));
 	}
@@ -77,8 +80,7 @@ void solver::force(rubik* crubik, string lastCommand, int comLength) {
 		tc = string(1, lastCommand.at(lastCommand.length() - 1));
 	}
 	test->process(tc);*/
-	string tc;
-	for (int i = 0; i < lastCommand.length(); i++) {
+	for (unsigned int i = 0; i < lastCommand.length(); i++) {
 		if (i < lastCommand.length() - 1 && lastCommand.at(i + 1) == '\'') {
 			test->process(string(1, lastCommand.at(i)) + '\'');
 			tc = string(1, lastCommand.at(i)) + '\'';
@@ -92,7 +94,12 @@ void solver::force(rubik* crubik, string lastCommand, int comLength) {
 	if (checkSolved(test->display())) {
 		isSolved = true;
 		//cout << "Solution Found " << lastCommand << " after " << pcount << " nodes" << endl;
-		for (int j = 0; j < lastCommand.length(); j++) {
+                if (stallRequired && stallCount > 0) {
+                    while (stallCount-- > 0) {
+                        cout << commands.at(0) << endl;
+                    }
+                }
+		for (unsigned int j = 0; j < lastCommand.length(); j++) {
 			if (j + 1 < lastCommand.length() && lastCommand.at(j+1) == '\'') {
 				cout << lastCommand.at(j++) << "'" << endl;
 			}
@@ -102,10 +109,21 @@ void solver::force(rubik* crubik, string lastCommand, int comLength) {
 		}
 	}
 	else {
+            time(&end);
+            if (difftime(end, start) > 20) {
+                stallRequired = true;
+                cout << commands.at(0) << endl;
+                if (stallCount-- == 1) {
+                    stallCount = 4;
+                }
+                time(&start);
+            }
 		if ((test->display()).compare(cube->display()) != 0) {
-			for (int i = 0; i < commands.size(); i++) {
-				if (tc.compare(commands.at(i) + "'") != 0 && (tc + "'").compare(commands.at(i)) != 0)
-				triedCommands.push(lastCommand + commands.at(i));
+			for (unsigned int i = 0; i < commands.size(); i++) {
+				if (tc.compare(commands.at(i) + "'") != 0 
+                                        && (tc + "'").compare(commands.at(i)) != 0) {
+                                    triedCommands.push(lastCommand + commands.at(i));
+                                }
 			}
 		}
 	}
