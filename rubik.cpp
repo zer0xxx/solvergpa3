@@ -44,14 +44,13 @@ void rubik::reset() {
 }
 
 string rubik::display() {
-	QString dump = "";
+	string dump = "";
 	for (int face = 0; face < 6; face++) {
 		for (int cell = 0; cell < 9; cell++) {
-			dump.append(cube[face][cell]);
+			dump.append(string(1, cube[face][cell]));
 		}
 	}
-	return qPrintable(dump);
-	//printf("%s\n", qPrintable(dump));
+	return dump;
 }
 
 void rubik::transpose(int face, bool clockwise) {

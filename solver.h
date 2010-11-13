@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <queue>
+#include <sys/time.h>
 #include "rubik.h"
 using namespace std;
 
@@ -17,7 +18,7 @@ class solver {
 public:
 	solver(string s, string r);
 	void solve();
-	void force(rubik* cube, string lc, int steps);
+	void force(string lc);
 	bool checkSolved(string s);
 	virtual ~solver();
 	unsigned int pcount;
@@ -29,6 +30,10 @@ private:
 	queue<string> triedCommands;
 	bool isSolved;
 	string tc;
+        time_t start;
+        time_t end;
+        int stallCount;
+        bool stallRequired;
 };
 
 #endif /* SOLVER_H_ */
