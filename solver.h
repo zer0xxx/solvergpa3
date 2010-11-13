@@ -20,6 +20,7 @@ public:
 	void force(rubik* cube, string lc, int steps);
 	bool checkSolved(string s);
 	virtual ~solver();
+	unsigned int pcount;
 
 	rubik* cube;
 	rubik* test;
