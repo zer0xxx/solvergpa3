@@ -166,6 +166,7 @@ void rubik::roll(int f1, int c11, int c12, int c13,
 }
 
 void rubik::process(string command) {
+	//cout << " " << command << endl;
 	if (command.compare("X") == 0) {
 		//System.out.println("Rotate along X axis CW");
 		int temp = top;

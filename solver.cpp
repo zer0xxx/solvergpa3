@@ -36,17 +36,20 @@ solver::solver(string state, string r) {
 	}
 	else {
 		for (unsigned int i = 0; i < r.size(); i++) {
-                    if ((i + 1 < r.size()) && r.at(i + 1) == '\'') {
-                            string ps = string(1, r.at(i++));
-                            ps += '\'';
-                            commands.push_back(ps);
-                    }
-                    else {
-                            commands.push_back(string(1, r.at(i)));
-                    }
-		}
-                /*cout << "Available commands: " << endl;
-		for (unsigned int i = 0; i < commands.size(); i++) {
+			/*if (r.at(i) != 'X'
+				&& r.at(i) != 'Y'
+				&& r.at(i) != 'Z'
+				&& r.at(i) != '\'') {*/
+				if ((i + 1 < r.size()) && r.at(i + 1) == '\'') {
+					string ps = string(1, r.at(i++));
+					ps += '\'';
+					commands.push_back(ps);
+				}
+				else {
+					commands.push_back(string(1, r.at(i)));
+				}
+			}
+		/*for (unsigned int i = 0; i < commands.size(); i++) {
 			cout << commands[i];
 		}
 		cout << endl;*/
@@ -79,6 +82,7 @@ void solver::force(string lastCommand) {
 	test->process(tc);*/
         //cout << "FROM " << test->display() << endl;
 	for (unsigned int i = 0; i < lastCommand.length(); i++) {
+		//cout << lastCommand; 
 		if (i < lastCommand.length() - 1 && lastCommand.at(i + 1) == '\'') {
 			test->process(string(1, lastCommand.at(i)) + '\'');
                         tc = string(1, lastCommand.at(i)) + '\'';
