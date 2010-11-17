@@ -6,6 +6,8 @@
  */
 
 #include "rubik.h"
+#include <stdlib.h>
+#include <vector>
 #include <QtCore>
 
 rubik::rubik() {
@@ -43,6 +45,14 @@ void rubik::reset() {
 	down = 5;
 }
 
+void rubik::resetOrientation() {
+    top = 0;
+    front = 1;
+    right = 2;
+    back = 3;
+    left = 4;
+    down = 5;
+}
 string rubik::display() {
 	string dump = "";
 	for (int face = 0; face < 6; face++) {
@@ -51,6 +61,26 @@ string rubik::display() {
 		}
 	}
 	return dump;
+}
+
+vector<int> rubik::showOrientation() {
+    vector<int> so;
+    so.push_back(top);
+    so.push_back(front);
+    so.push_back(right);
+    so.push_back(back);
+    so.push_back(left);
+    so.push_back(down);
+    return so;
+}
+
+void rubik::applyOrientation(vector<int> s) {
+    top = s.at(0);
+    front = s.at(1);
+    right = s.at(2);
+    back = s.at(3);
+    left = s.at(4);
+    down = s.at(5);
 }
 
 void rubik::transpose(int face, bool clockwise) {

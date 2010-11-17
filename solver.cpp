@@ -36,21 +36,17 @@ solver::solver(string state, string r) {
 	}
 	else {
 		for (unsigned int i = 0; i < r.size(); i++) {
-			if (r.at(i) != 'X'
-				&& r.at(i) != 'Y'
-				&& r.at(i) != 'Z'
-				&& r.at(i) != '\'') {
-				if ((i + 1 < r.size()) && r.at(i + 1) == '\'') {
-					string ps = string(1, r.at(i++));
-					ps += '\'';
-					commands.push_back(ps);
-				}
-				else {
-					commands.push_back(string(1, r.at(i)));
-				}
-			}
+                    if ((i + 1 < r.size()) && r.at(i + 1) == '\'') {
+                            string ps = string(1, r.at(i++));
+                            ps += '\'';
+                            commands.push_back(ps);
+                    }
+                    else {
+                            commands.push_back(string(1, r.at(i)));
+                    }
 		}
-		/*for (unsigned int i = 0; i < commands.size(); i++) {
+                /*cout << "Available commands: " << endl;
+		for (unsigned int i = 0; i < commands.size(); i++) {
 			cout << commands[i];
 		}
 		cout << endl;*/
@@ -64,6 +60,7 @@ void solver::solve() {
         time(&start);
 	while (!isSolved && triedCommands.size() > 0) {
 		test->setState(cube->display());
+                test->resetOrientation();
 		force(triedCommands.front());
 		triedCommands.pop();
 	}
@@ -80,17 +77,30 @@ void solver::force(string lastCommand) {
 		tc = string(1, lastCommand.at(lastCommand.length() - 1));
 	}
 	test->process(tc);*/
+        //cout << "FROM " << test->display() << endl;
 	for (unsigned int i = 0; i < lastCommand.length(); i++) {
 		if (i < lastCommand.length() - 1 && lastCommand.at(i + 1) == '\'') {
 			test->process(string(1, lastCommand.at(i)) + '\'');
-			tc = string(1, lastCommand.at(i)) + '\'';
+                        tc = string(1, lastCommand.at(i)) + '\'';
+                        //cout << "tc: " << tc << " " << endl;
+                        /*for (int v = 0; v < 6; v++) {
+                            cout << test->showOrientation().at(v);
+                        }
+                        cout << endl;*/
 			i++;
 		}
 		else {
 			test->process(string(1, lastCommand.at(i)));
-			tc = string(1, lastCommand.at(i));
+                        tc = string(1, lastCommand.at(i));
+                        //cout << "tc: " << tc << " " << endl;
+                        /*for (int v = 0; v < 6; v++) {
+                            cout << test->showOrientation().at(v);
+                        }
+                        cout << endl;*/
 		}
+                //cout << test->display() << endl;
 	}
+        //cout << "END: " << test->display() << endl;
 	if (checkSolved(test->display())) {
 		isSolved = true;
 		//cout << "Solution Found " << lastCommand << " after " << pcount << " nodes" << endl;
@@ -118,14 +128,44 @@ void solver::force(string lastCommand) {
                 }
                 time(&start);
             }
-		if ((test->display()).compare(cube->display()) != 0) {
-			for (unsigned int i = 0; i < commands.size(); i++) {
-				if (tc.compare(commands.at(i) + "'") != 0 
-                                        && (tc + "'").compare(commands.at(i)) != 0) {
-                                    triedCommands.push(lastCommand + commands.at(i));
-                                }
-			}
-		}
+
+            /*if (tc.compare("Y")) { test->process("Y'"); }
+            else if (tc.compare("Y'")) { test->process("Y"); }
+            else if (tc.compare("X")) { test->process("X'"); }
+            else if (tc.compare("X'")) { test->process("X"); }
+            else if (tc.compare("Z")) { test->process("Z'"); }
+            else if (tc.compare("Z'")) { test->process("Z"); }*/
+            //if ((test->display()).compare(cube->display()) != 0) {
+            /*
+             * On rotation, don't compare state, always append next commands
+             */
+            /*if (lastCommand.compare("ZZF'D'B'R'") == 0) {
+                cout << "HUH!" << endl;
+            }*/
+            if (tc.compare("X") != 0 && tc.compare("X'") != 0 &&
+                    tc.compare("Y") != 0 && tc.compare("Y'") != 0 &&
+                    tc.compare("Z") != 0 && tc.compare("Z'") != 0) {
+                if ((test->display()).compare(cube->display()) != 0) {
+                    for (unsigned int i = 0; i < commands.size(); i++) {
+                            if (tc.compare(commands.at(i) + "'") != 0
+                                    && (tc + "'").compare(commands.at(i)) != 0) {
+                                triedCommands.push(lastCommand + commands.at(i));
+                            }
+                    }
+                }
+                /*else {
+                    cout << lastCommand << " pruned" << endl;
+                }*/
+            }
+            else {
+                for (unsigned int i = 0; i < commands.size(); i++) {
+                    if (tc.compare(commands.at(i) + "'") != 0
+                            && (tc + "'").compare(commands.at(i)) != 0) {
+                        triedCommands.push(lastCommand + commands.at(i));
+                    }
+                }
+            }
+            //}
 	}
 }
 
