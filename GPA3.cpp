@@ -9,7 +9,6 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 	solver* s;
-	string localState;
 	if (argc > 1) {
 		if (argc > 2) {
 			s = new solver(string(argv[1]), argv[2]);
