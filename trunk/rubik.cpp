@@ -756,7 +756,7 @@ void rubik::process(string command) {
 		transpose(left, false);
 	}
 	else {
-		cout << "ERR!" << endl;
+		cout << "ERR command: " << command << endl;
 	}
 }
 
