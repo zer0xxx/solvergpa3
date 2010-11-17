@@ -40,6 +40,7 @@ solver::solver(string state, string r) {
 				&& r.at(i) != 'Y'
 				&& r.at(i) != 'Z'
 				&& r.at(i) != '\'') {*/
+			if (r.at(i) != '"') {
 				if ((i + 1 < r.size()) && r.at(i + 1) == '\'') {
 					string ps = string(1, r.at(i++));
 					ps += '\'';
@@ -49,6 +50,7 @@ solver::solver(string state, string r) {
 					commands.push_back(string(1, r.at(i)));
 				}
 			}
+		}
 		/*for (unsigned int i = 0; i < commands.size(); i++) {
 			cout << commands[i];
 		}
@@ -133,33 +135,20 @@ void solver::force(string lastCommand) {
                 time(&start);
             }
 
-            /*if (tc.compare("Y")) { test->process("Y'"); }
-            else if (tc.compare("Y'")) { test->process("Y"); }
-            else if (tc.compare("X")) { test->process("X'"); }
-            else if (tc.compare("X'")) { test->process("X"); }
-            else if (tc.compare("Z")) { test->process("Z'"); }
-            else if (tc.compare("Z'")) { test->process("Z"); }*/
-            //if ((test->display()).compare(cube->display()) != 0) {
-            /*
-             * On rotation, don't compare state, always append next commands
-             */
-            /*if (lastCommand.compare("ZZF'D'B'R'") == 0) {
-                cout << "HUH!" << endl;
-            }*/
-            if (tc.compare("X") != 0 && tc.compare("X'") != 0 &&
+            /*if (tc.compare("X") != 0 && tc.compare("X'") != 0 &&
                     tc.compare("Y") != 0 && tc.compare("Y'") != 0 &&
                     tc.compare("Z") != 0 && tc.compare("Z'") != 0) {
-                if ((test->display()).compare(cube->display()) != 0) {
+                if ((test->display()).compare(cube->display()) != 0) {*/
                     for (unsigned int i = 0; i < commands.size(); i++) {
                             if (tc.compare(commands.at(i) + "'") != 0
                                     && (tc + "'").compare(commands.at(i)) != 0) {
                                 triedCommands.push(lastCommand + commands.at(i));
                             }
                     }
-                }
-                /*else {
+                /*}
+                else {
                     cout << lastCommand << " pruned" << endl;
-                }*/
+                }
             }
             else {
                 for (unsigned int i = 0; i < commands.size(); i++) {
@@ -169,7 +158,7 @@ void solver::force(string lastCommand) {
                     }
                 }
             }
-            //}
+            //}*/
 	}
 }
 
