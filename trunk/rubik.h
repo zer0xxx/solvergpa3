@@ -8,6 +8,7 @@
 #ifndef RUBIK_H_
 #define RUBIK_H_
 #include <iostream>
+#include <vector>
 #include <string.h>
 using namespace std;
 
@@ -15,6 +16,7 @@ class rubik {
 public:
 	rubik();
 	void reset();
+        void resetOrientation();
 	string display();
 	void transpose(int face, bool clockwise);
 	void setState(string s);
@@ -23,6 +25,8 @@ public:
             int f3, int c31, int c32, int c33,
             int f4, int c41, int c42, int c43, bool clockwise);
 	void process(string c);
+        vector<int> showOrientation();
+        void applyOrientation(vector<int> so);
 
 	virtual ~rubik();
 
