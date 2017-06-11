@@ -1,0 +1,19 @@
+README - GPA1
+
+Group 6:
+William Granger - wgranger
+Julien Neidballa - jneidbal
+Brandon Gardner - bbgardne
+Jinliang Wei - jlwei
+
+ECE462 Purdue University
+
+GPA1 is essentially a Rubik's Cube that can be manipulated like a real Rubik's
+Cube, but it can be outputted in a text format based on the specifications
+listed below. 
+
+This programs meets all of the specifications listed here:
+
+https://engineering.purdue.edu/OOSD/F2010/Assignments/group/stage1.html
+
+This program was written in Java.
